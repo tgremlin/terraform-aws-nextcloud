@@ -27,3 +27,7 @@ variable "ssl_cert_arn" {
   description = "ARN for SSL certificate"
   type        = string
 }
+
+variable "lb_sg" {
+    description = "Security groups for "
+}
