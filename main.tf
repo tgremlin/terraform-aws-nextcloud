@@ -33,7 +33,7 @@ module "ssh22" {
 }
 
 module "alb" {
-  source         = "./modules/load balancer/"
+  source         = "./modules/load balancer"
   vpc_id         = module.vpc.vpc_id
   lb_type        = "application"
   region         = var.region
@@ -43,4 +43,15 @@ module "alb" {
   lb_sg          = ["${module.http80.lb_sg_id}", "${module.http443.lb_sg_id}"]
   public_subnets = module.vpc.public_subnets
   hosted_zone_name = var.hosted_zone_name
+}
+
+module "db_sg" {
+    source = "./modules/security groups/db_sg"
+    vpc_id = module.vpc.vpc_id
+    region = var.region
+    project = var.project
+    environment = var.environment
+    db_from_port = var.db_from_port
+    db_to_port = var.db_to_port
+    server_sg_id = module.http80.server_sg_id
 }
