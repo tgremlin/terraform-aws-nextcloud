@@ -36,3 +36,8 @@ variable "public_subnets" {
   description = "Public subnets to associate with the load balancer"
   type        = list(string)
 }
+
+variable "hosted_zone_name" {
+    description = "Public hosted zone name"
+    type = string
+}

@@ -27,3 +27,8 @@ variable "ssl_cert_arn" {
   description = "ARN for SSL certificate"
   type        = string
 }
+
+variable "hosted_zone_name" {
+  description = "Public hosted zone name"
+  type        = string
+}

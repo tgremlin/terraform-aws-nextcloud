@@ -42,4 +42,5 @@ module "alb" {
   ssl_cert_arn   = var.ssl_cert_arn
   lb_sg          = ["${module.http80.lb_sg_id}", "${module.http443.lb_sg_id}"]
   public_subnets = module.vpc.public_subnets
+  hosted_zone_name = var.hosted_zone_name
 }
