@@ -5,22 +5,23 @@ provider "aws" {
 resource "aws_lb" "alb" {
   name               = "${var.project}-ALB"
   load_balancer_type = var.lb_type
-    security_groups = var.lb_sg
+  security_groups    = var.lb_sg
+  subnets            = var.public_subnets
 }
 
 # Because we are terminating with SSL at the load balancer, our
 # target group can use HTTP.
 resource "aws_lb_target_group" "alb-tg" {
-  port = 80
-    protocol = "HTTP"
-    vpc_id = var.vpc_id
+  port                          = 80
+  protocol                      = "HTTP"
+  vpc_id                        = var.vpc_id
+  
+  load_balancing_algorithm_type = "least_outstanding_requests"
 
-    load_balancing_algorithm_type = "least_outstanding_requests"
-
-    stickiness {
-      enabled = true
-      type = "lb_cookie"
-    }
+  stickiness {
+    enabled = true
+    type    = "lb_cookie"
+  }
 
   health_check {
     healthy_threshold   = 2

@@ -29,5 +29,10 @@ variable "ssl_cert_arn" {
 }
 
 variable "lb_sg" {
-    description = "Security groups for "
+  description = "Security groups for load balancer"
+  type        = list(string)
+}
+variable "public_subnets" {
+  description = "Public subnets to associate with the load balancer"
+  type        = list(string)
 }

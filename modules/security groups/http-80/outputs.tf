@@ -13,7 +13,7 @@ output "server_sg_id" {
   value       = aws_security_group.http_80_server.id
 }
 
-output "lb_sh_id" {
+output "lb_sg_id" {
   description = "ID of the http_80-lb-sg"
   value       = aws_security_group.http_80_lb.id
 }

@@ -31,3 +31,15 @@ module "ssh22" {
   environment = var.environment
   ssh_allowed = [var.ssh_allowed]
 }
+
+module "alb" {
+  source         = "./modules/load balancer/"
+  vpc_id         = module.vpc.vpc_id
+  lb_type        = "application"
+  region         = var.region
+  project        = var.project
+  environment    = var.environment
+  ssl_cert_arn   = var.ssl_cert_arn
+  lb_sg          = ["${module.http80.lb_sg_id}", "${module.http443.lb_sg_id}"]
+  public_subnets = module.vpc.public_subnets
+}
