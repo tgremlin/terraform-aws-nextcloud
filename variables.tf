@@ -32,3 +32,13 @@ variable "hosted_zone_name" {
   description = "Public hosted zone name"
   type        = string
 }
+
+variable "db_from_port" {
+    description = "From port for the DB instance"
+    type = string
+}
+
+variable "db_to_port" {
+    description = "To port for the DB instance"
+    type = string
+}

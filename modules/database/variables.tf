@@ -59,4 +59,17 @@ variable "db_password" {
 
 variable "db_sg" {
     description = "ID of security group for RDS Cluster"
+    type = list(string)
+}
+
+variable "publicly_accessible" {
+    description = "Is the DB instance publicly accessible? Default is false"
+    type = bool
+    default = false
+}
+
+variable "skip_final_snapshot" {
+    description = "Skip taking a final snapshot before destroy operation. Default is false"
+    type = bool
+    default = false
 }
