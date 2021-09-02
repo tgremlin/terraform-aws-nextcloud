@@ -18,26 +18,16 @@ variable "environment" {
   type        = string
 }
 
-variable "lb_type" {
-  description = "Options: application, network"
+variable "db_from_port" {
+  description = "From port for the DB instance"
   type        = string
 }
 
-variable "ssl_cert_arn" {
-  description = "ARN for SSL certificate"
+variable "db_to_port" {
+  description = "To port for the DB instance"
   type        = string
 }
-
-variable "lb_sg" {
-  description = "Security groups for load balancer"
-  type        = list(string)
-}
-variable "public_subnets" {
-  description = "Public subnets to associate with the load balancer"
-  type        = list(string)
-}
-
-variable "hosted_zone_name" {
-  description = "Public hosted zone name"
+variable "server_sg_id" {
+  description = "Security group of the webserver"
   type        = string
 }

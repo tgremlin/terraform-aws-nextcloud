@@ -12,10 +12,10 @@ resource "aws_lb" "alb" {
 # Because we are terminating with SSL at the load balancer, our
 # target group can use HTTP.
 resource "aws_lb_target_group" "alb-tg" {
-  port                          = 80
-  protocol                      = "HTTP"
-  vpc_id                        = var.vpc_id
-  
+  port     = 80
+  protocol = "HTTP"
+  vpc_id   = var.vpc_id
+
   load_balancing_algorithm_type = "least_outstanding_requests"
 
   stickiness {
@@ -54,5 +54,23 @@ resource "aws_lb_listener" "https" {
     type             = "forward"
     target_group_arn = aws_lb_target_group.alb-tg.arn
 
+  }
+}
+
+data "aws_route53_zone" "hosted_zone" {
+  name         = var.hosted_zone_name
+  private_zone = false
+
+}
+
+resource "aws_route53_record" "nc" {
+  zone_id = data.aws_route53_zone.hosted_zone.zone_id
+  name    = "nc.${data.aws_route53_zone.hosted_zone.name}"
+  type    = "CNAME"
+
+  alias {
+    name                   = aws_lb.alb.dns_name
+    zone_id                = aws_lb.alb.zone_id
+    evaluate_target_health = true
   }
 }
