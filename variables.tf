@@ -94,3 +94,48 @@ variable "skip_final_snapshot" {
   type        = bool
   default     = false
 }
+
+variable "webserver_instance_type" {
+  description = "Instance class for the webserver instnace"
+  type        = string
+}
+
+variable "key_name" {
+  description = "AWS SSH keypair name"
+  type        = string
+}
+
+variable "placement_strategy" {
+  description = "Options: cluster, spread, partition"
+  type        = string
+}
+
+variable "as_max_size" {
+  description = "Auto-scaling group max size"
+  type        = string
+}
+
+variable "as_min_size" {
+  description = "Auto-scaling group min size"
+  type        = string
+}
+
+variable "health_check_grace_period" {
+  description = "Auto-scaling group health check grace period in seconds"
+  type        = string
+}
+
+variable "health_check_type" {
+  description = "Options: EC2, ELB"
+  type        = string
+}
+
+variable "desired_capacity" {
+  description = "Auto-scaling group desired capacity"
+  type        = string
+}
+
+variable "key_path" {
+  description = "Local path to private SSH key"
+  type        = string
+}

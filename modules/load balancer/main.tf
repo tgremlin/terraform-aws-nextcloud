@@ -7,6 +7,11 @@ resource "aws_lb" "alb" {
   load_balancer_type = var.lb_type
   security_groups    = var.lb_sg
   subnets            = var.public_subnets
+
+  tags = {
+    Name        = "${var.project}-${var.region}-LB"
+    Environment = var.environment
+  }
 }
 
 # Because we are terminating with SSL at the load balancer, our
