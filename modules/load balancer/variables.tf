@@ -38,6 +38,6 @@ variable "public_subnets" {
 }
 
 variable "hosted_zone_name" {
-    description = "Public hosted zone name"
-    type = string
+  description = "Public hosted zone name"
+  type        = string
 }

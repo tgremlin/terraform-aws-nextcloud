@@ -19,15 +19,15 @@ variable "environment" {
 }
 
 variable "db_from_port" {
-    description = "From port for the DB instance"
-    type = string
+  description = "From port for the DB instance"
+  type        = string
 }
 
 variable "db_to_port" {
-    description = "To port for the DB instance"
-    type = string
+  description = "To port for the DB instance"
+  type        = string
 }
 variable "server_sg_id" {
-    description = "Security group of the webserver"
-    type = string
+  description = "Security group of the webserver"
+  type        = string
 }
