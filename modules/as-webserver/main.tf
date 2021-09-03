@@ -23,7 +23,7 @@ resource "aws_launch_configuration" "as_webserver" {
   image_id        = data.aws_ami.ubuntu.id
   instance_type   = var.webserver_instance_type
   key_name        = var.key_name
-  security_groups = [var.server_sg_id[0], var.db_sg[0], var.ssh_sg_id[0],var.instance_internet_sg_id[0]]
+  security_groups = [var.server_sg_id[0], var.db_sg[0], var.ssh_sg_id[0], var.instance_internet_sg_id[0]]
 
   lifecycle {
     create_before_destroy = true

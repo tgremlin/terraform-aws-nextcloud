@@ -23,10 +23,10 @@ resource "aws_security_group_rule" "ingress_internet" {
 }
 
 resource "aws_security_group_rule" "egress_internet" {
-    type = "egress"
-    from_port = 1024
-    to_port = 65535
-    protocol = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-    security_group_id = aws_security_group.instance_internet.id
+  type              = "egress"
+  from_port         = 1024
+  to_port           = 65535
+  protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = aws_security_group.instance_internet.id
 }

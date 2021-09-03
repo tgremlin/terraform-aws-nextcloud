@@ -15,7 +15,7 @@ variable "environment" {
 
 variable "ssh_allowed" {
   description = "CIDR block of IPs allowed to access servers via SSH"
-  type        = string
+  type        = list(string)
 }
 
 variable "lb_type" {

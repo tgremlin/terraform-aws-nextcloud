@@ -75,5 +75,5 @@ variable "public_subnets" {
 
 variable "instance_internet_sg_id" {
   description = "Instance internet security group"
-  type = list(string)
+  type        = list(string)
 }

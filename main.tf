@@ -3,8 +3,11 @@ provider "aws" {
 }
 
 module "vpc" {
-  source      = "github.com/tgremlin/terraform-aws-vpc.git"
+  source      = "./modules/vpc"
   environment = var.environment
+  region = var.region
+  project = var.project
+  enable_nat_gateway = true
 }
 
 module "http80" {
@@ -29,7 +32,7 @@ module "ssh22" {
   region      = var.region
   project     = var.project
   environment = var.environment
-  ssh_allowed = [var.ssh_allowed]
+  ssh_allowed = var.ssh_allowed
 }
 
 module "alb" {
