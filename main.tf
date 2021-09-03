@@ -3,11 +3,11 @@ provider "aws" {
 }
 
 module "vpc" {
-  source      = "./modules/vpc"
-  environment = var.environment
-  region = var.region
-  project = var.project
-  enable_nat_gateway = true
+  source         = "./modules/vpc"
+  environment    = var.environment
+  region         = var.region
+  project        = var.project
+  vpc_cidr_block = var.vpc_cidr_block
 }
 
 module "http80" {
@@ -44,7 +44,7 @@ module "alb" {
   environment      = var.environment
   ssl_cert_arn     = var.ssl_cert_arn
   lb_sg            = ["${module.http80.lb_sg_id}", "${module.http443.lb_sg_id}"]
-  public_subnets   = module.vpc.public_subnets
+  public_subnets   = [module.vpc.public_subnet_1,module.vpc.public_subnet_2]
   hosted_zone_name = var.hosted_zone_name
 }
 
@@ -60,10 +60,10 @@ module "db_sg" {
 }
 
 module "instance-internet" {
-  source = "./modules/security groups/instance_internet"
-  vpc_id  = module.vpc.vpc_id
-  region = var.region
-  project = var.project
+  source      = "./modules/security groups/instance_internet"
+  vpc_id      = module.vpc.vpc_id
+  region      = var.region
+  project     = var.project
   environment = var.environment
 
 }
@@ -74,7 +74,7 @@ module "db_instance" {
   region               = var.region
   project              = var.project
   environment          = var.environment
-  db_subnets           = module.vpc.database_subnets
+  db_subnets           = [module.vpc.private_subnet_1,module.vpc.private_subnet_2]
   db_subnet_group_name = var.db_subnet_group_name
   db_sg_id             = [module.db_sg.db_sg_id]
   db_engine_version    = var.db_engine_version
@@ -97,14 +97,14 @@ module "as_web" {
   server_sg_id              = [module.http80.server_sg_id]
   ssh_sg_id                 = [module.ssh22.ssh_sg_id]
   db_sg                     = [module.db_sg.db_sg_id]
-  instance_internet_sg_id  = [module.instance-internet.instance_internet_sg_id]
+  instance_internet_sg_id   = [module.instance-internet.instance_internet_sg_id]
   placement_strategy        = var.placement_strategy
   as_max_size               = var.as_max_size
   as_min_size               = var.as_min_size
   health_check_grace_period = var.health_check_grace_period
   health_check_type         = var.health_check_type
   desired_capacity          = var.desired_capacity
-  public_subnets            = module.vpc.public_subnets
+  public_subnets            = [module.vpc.public_subnet_1,module.vpc.public_subnet_2]
   key_name                  = var.key_name
 
 }
