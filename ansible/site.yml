@@ -1,0 +1,39 @@
+---
+- become: yes
+  hosts: all
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+  name: apache-install
+  tasks:
+    - name: Add the user 'gremlin' and add it to 'sudo'
+      user:
+        name: gremlin
+        group: sudo
+    - name: Add SSH key to 'gremlin'
+      authorized_key:
+        user: gremlin
+        key: "{{ lookup('file', pub_key ) }}"
+    - name: Update all packages
+      apt:
+        upgrade: dist
+        update_cache: yes
+        cache_valid_time: 3600
+      register: process_locked
+      until: process_locked is not failed
+      retries: 100
+    - name: Install apache2
+      apt: name=apache2 update_cache=yes state=latest
+    - name: Copy index.html file
+      copy:
+        src: "{{ indexFilePath }}"
+        dest: /var/www/html/index.html
+        owner: gremlin
+    - name: Enable mod_rewrite
+      apache2_module: name=rewrite state=present
+      notify:
+        - Restart apache2
+
+  handlers:
+    - name: Restart apache2
+      service: name=apache2 state=restarted     
+

@@ -3,8 +3,11 @@ provider "aws" {
 }
 
 module "vpc" {
-  source      = "github.com/tgremlin/terraform-aws-vpc.git"
+  source      = "./modules/vpc"
   environment = var.environment
+  region = var.region
+  project = var.project
+  enable_nat_gateway = true
 }
 
 module "http80" {
@@ -29,7 +32,7 @@ module "ssh22" {
   region      = var.region
   project     = var.project
   environment = var.environment
-  ssh_allowed = [var.ssh_allowed]
+  ssh_allowed = var.ssh_allowed
 }
 
 module "alb" {
@@ -56,6 +59,15 @@ module "db_sg" {
   server_sg_id = module.http80.server_sg_id
 }
 
+module "instance-internet" {
+  source = "./modules/security groups/instance_internet"
+  vpc_id  = module.vpc.vpc_id
+  region = var.region
+  project = var.project
+  environment = var.environment
+
+}
+
 module "db_instance" {
   source = "./modules/database"
   #vpc_id      = module.vpc.vpc_id
@@ -68,5 +80,31 @@ module "db_instance" {
   db_engine_version    = var.db_engine_version
   db_username          = var.db_username
   db_password          = var.db_password
+
+}
+
+resource "aws_key_pair" "deployer_key" {
+  key_name   = "deployer-key"
+  public_key = file(var.key_path)
+}
+
+module "as_web" {
+  source                    = "./modules/as-webserver"
+  region                    = var.region
+  project                   = var.project
+  environment               = var.environment
+  webserver_instance_type   = var.webserver_instance_type
+  server_sg_id              = [module.http80.server_sg_id]
+  ssh_sg_id                 = [module.ssh22.ssh_sg_id]
+  db_sg                     = [module.db_sg.db_sg_id]
+  instance_internet_sg_id  = [module.instance-internet.instance_internet_sg_id]
+  placement_strategy        = var.placement_strategy
+  as_max_size               = var.as_max_size
+  as_min_size               = var.as_min_size
+  health_check_grace_period = var.health_check_grace_period
+  health_check_type         = var.health_check_type
+  desired_capacity          = var.desired_capacity
+  public_subnets            = module.vpc.public_subnets
+  key_name                  = var.key_name
 
 }

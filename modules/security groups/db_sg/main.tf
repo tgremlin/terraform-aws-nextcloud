@@ -8,7 +8,7 @@ resource "aws_security_group" "db_sg" {
   vpc_id      = var.vpc_id
 
   tags = {
-    Name        = "${var.project}-http80-lb-sg"
+    Name        = "${var.project}-db-sg"
     Environment = "${var.environment}"
   }
 }

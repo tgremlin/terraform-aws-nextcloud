@@ -28,6 +28,11 @@ resource "aws_db_instance" "db" {
   publicly_accessible    = var.publicly_accessible
   skip_final_snapshot    = var.skip_final_snapshot
 
+  tags = {
+    Name        = "${var.project}-${var.region}-RDS-Instance"
+    Environment = var.environment
+  }
+
 }
 
 resource "aws_db_parameter_group" "db_parameter_group" {
